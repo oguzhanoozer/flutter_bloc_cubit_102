@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kartal/kartal.dart';
 
 import '../cubit/unknown_cubit.dart';
 import '../cubit/unknown_state.dart';
+import '../product/string_extension.dart';
 import '../service/unknown_service.dart';
 import '../service/vexana_network_manager.dart';
 
@@ -13,7 +14,7 @@ class UnKnownView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UnKnownCubit>(
-      create: (context) => UnKnownCubit(UnKnownService(VexanaNetworkManagerUnKnown()),context)..fetchDataList(),
+      create: (context) => UnKnownCubit(UnKnownService(VexanaNetworkManagerUnKnown()), context)..fetchDataList(),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -40,8 +41,11 @@ class UnKnownView extends StatelessWidget {
             return ListView.builder(
               itemCount: state.dataList?.length,
               itemBuilder: (context, index) => Card(
-                child: Center(child: Text(state.dataList?[index].name ?? "")),
-              ),
+                  child: ListTile(
+                leading: Text(state.dataList?[index].id.toString() ?? ""),
+                title: Text(state.dataList?[index].name ?? ""),
+                trailing: CircleAvatar(backgroundColor:Color( state.dataList?[index].color?.colorValue??0)),
+              )),
             );
           },
         ),
